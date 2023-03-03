@@ -1,3 +1,5 @@
+import { Button, Input, styled } from '@mui/material'
+import { Box } from '@mui/system'
 import axios from 'axios'
 import React, { useState } from 'react'
 
@@ -24,22 +26,38 @@ function UploadForm({ getAllvideos }) {
         }
     }
     return (
-        <form onSubmit={handleSubmit} >
-            <div>
-                <label>Name</label>
-                <input onChange={(e) => setName(e.target.value)} type='text' name='name' id='name' className=''>
-                </input>
+        <Container>
+            <form onSubmit={handleSubmit} >
+                <div>
+                    <label>Name </label>
+                    <Input placeholder='name for video' onChange={(e) => setName(e.target.value)} type='text' name='name' id='name' className=''>
+                    </Input>
 
-            </div>
-            <div>
-                <label >Upload videos</label>
-                <input onChange={(e) => {
-                    setVideos(e.target.files)
-                }} type='file' name='videos' id='videos' accept='.mp4,.mkv' />
-            </div>
-            <button type='submit' >Submit</button>
-        </form>
+                </div>
+                <div>
+                    <label >Upload videos   </label>
+                    <input className='video' onChange={(e) => {
+                        setVideos(e.target.files)
+                    }} type='file' name='videos' id='videos' accept='.mp4,.mkv' />
+                </div>
+                <Button variant='contained' type='submit' >Submit</Button>
+            </form>
+        </Container>
     )
 }
+const Container = styled(Box)({
+    display: 'flex',
+    flexDirection: "column"
+    , height: "200px",
+    "form": {
+        height: "100%",
+        gap: "2rem",
+        display: "flex",
+        "input": {
+            marginLeft: "1rem"
+        },
 
+        flexDirection: "column"
+    }
+})
 export default UploadForm

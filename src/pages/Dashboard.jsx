@@ -1,5 +1,6 @@
-import { styled } from '@mui/material'
+import { Button, styled } from '@mui/material'
 import { Box } from '@mui/system'
+import { Modal } from 'antd'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import UploadForm from '../components/uploadForm'
@@ -8,6 +9,7 @@ import UploadList from '../components/UploadList'
 function Dashboard() {
     const user = JSON.parse(localStorage.getItem("chat-app-user"))
     const [medias, setMedias] = useState([])
+    const [openModal, setOpenModal] = useState(false)
     const getAllvideos = () => {
         axios.get(`${process.env.REACT_APP_API}/all/${user._id}`).then(result => {
             console.log(result)
@@ -54,6 +56,12 @@ function Dashboard() {
 
                     </div>
                     <UploadList medias={medias} />
+                    <Button onClick={() => setOpenModal(true)} variant='contained' >Upload Video</Button>
+                    <Modal
+                        footer={[]}
+                        okButtonProps={{ hidden: true }} open={openModal} onCancel={() => setOpenModal(false)} >
+                        <UploadForm getAllvideos={getAllvideos} />
+                    </Modal>
                 </div>
             </Container>
         )
