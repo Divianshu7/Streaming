@@ -58,7 +58,7 @@ function Video() {
             {video != null && (
                 <div className='container' >
                     <video controls preload='auto'  >
-                        <source src={`http://localhost:5000${video?.videos}`} />
+                        <source src={`https://streaming-api.onrender.com${video?.videos}`} />
                         ;Your browser does not support video tag
                     </video>
                     <p className='name'>{video?.name}</p>
