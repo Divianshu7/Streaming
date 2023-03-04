@@ -15,7 +15,7 @@ function CommentSection({ videoId }) {
         temp.postedBy = user._id
         temp.replies = []
         temp._id = uuidv4()
-        setComments([temp, ...comments])
+        setComments([...comments, temp])
         const resp = await axios.post(`${process.env.REACT_APP_API}/comment/${videoId}/${user._id}`, { comment })
     }
     const allComments = async () => {
