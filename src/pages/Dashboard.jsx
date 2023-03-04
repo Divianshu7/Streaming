@@ -21,7 +21,7 @@ function Dashboard() {
     }
     useEffect(() => {
         getAllvideos()
-    }, [getAllvideos])
+    }, [])
     if (user) {
         const name = user.username
         return (

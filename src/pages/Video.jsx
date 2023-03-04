@@ -42,13 +42,13 @@ function Video() {
     }
     useEffect(() => {
         updateViews()
-    }, [pageVisited, updateViews])
+    }, [pageVisited])
     useEffect(() => {
         getAllvideos()
-    }, [getAllvideos])
+    }, [])
     useEffect(() => {
         updateLikes()
-    }, [likes, updateLikes])
+    }, [likes])
     const share = () => {
         setShowModal(true)
     }

@@ -36,7 +36,7 @@ function Login() {
             document.getElementById("signInDiv"),
             { theme: "outline", size: "large" }
         )
-    }, [handleCallBack])
+    }, [])
     const history = useNavigate()
     const [values, setValues] = useState({
         username: '',
@@ -46,7 +46,7 @@ function Login() {
         if (localStorage.getItem('chat-app-user')) {
             history('/home')
         }
-    }, [history])
+    }, [])
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (handleValidation()) {

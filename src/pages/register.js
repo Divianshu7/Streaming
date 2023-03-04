@@ -39,12 +39,12 @@ function Register() {
             document.getElementById("signInDiv"),
             { theme: "outline", size: "large" }
         )
-    }, [handleCallBack])
+    }, [])
     useEffect(() => {
         if (localStorage.getItem('chat-app-user')) {
             history('/')
         }
-    }, [history])
+    }, [])
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(values)

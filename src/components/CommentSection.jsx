@@ -26,7 +26,7 @@ function CommentSection({ videoId }) {
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem("chat-app-user")))
         allComments()
-    }, [allComments])
+    }, [])
 
     return (
         <Container>
