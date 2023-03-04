@@ -13,7 +13,11 @@ function Login() {
         console.log(userObject)
         const email = userObject.email
         console.log(email)
-        const { data } = axios.post(`${process.env.REACT_APP_API}/loginWithGoogle`, { email }).then((r) => { return r })
+        googleLogin(email)
+    }
+    const googleLogin = async (email) => {
+        const { data } = await axios.post(`${process.env.REACT_APP_API}/loginWithGoogle`, { email })
+        console.log(data)
         if (data.status === true) {
             localStorage.setItem('chat-app-user', JSON.stringify(data.user))
             history('/home')
