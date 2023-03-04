@@ -15,7 +15,7 @@ function UploadList({ medias }) {
                                 {media.videos.map(video => {
                                     return (
                                         <video preload='auto' width='60' height='60' controls>
-                                            <source src={`http://localhost:5000${video}`} />
+                                            <source src={`https://streaming-api.onrender.com${video}`} />
                                             ;Your browser does not support video tag
                                         </video>
                                     )
