@@ -3,8 +3,6 @@ import { Box } from '@mui/system'
 import React from 'react'
 import HomeVideos from '../components/HomeVideos'
 import TopNav from '../components/TopNav'
-import UploadList from '../components/UploadList'
-
 function Home() {
     return (
         <Container>

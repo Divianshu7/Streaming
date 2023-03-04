@@ -5,9 +5,9 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import TopNav from '../components/TopNav'
-import { Send, ThumbUp, ThumbUpAlt, ThumbUpOffAltOutlined, Visibility } from '@mui/icons-material'
+import { Send, ThumbUpOffAltOutlined, Visibility } from '@mui/icons-material'
 import CommentSection from '../components/CommentSection'
-import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, LineIcon, LinkedinIcon, LinkedinShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share'
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share'
 import { Modal } from 'antd'
 function Video() {
     const currentPageUrl = window.location.href;
@@ -42,13 +42,13 @@ function Video() {
     }
     useEffect(() => {
         updateViews()
-    }, [pageVisited])
+    }, [pageVisited, updateViews])
     useEffect(() => {
         getAllvideos()
-    }, [])
+    }, [getAllvideos])
     useEffect(() => {
         updateLikes()
-    }, [likes])
+    }, [likes, updateLikes])
     const share = () => {
         setShowModal(true)
     }

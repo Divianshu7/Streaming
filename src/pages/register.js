@@ -39,18 +39,18 @@ function Register() {
             document.getElementById("signInDiv"),
             { theme: "outline", size: "large" }
         )
-    }, [])
+    }, [handleCallBack])
     useEffect(() => {
         if (localStorage.getItem('chat-app-user')) {
             history('/')
         }
-    }, [])
+    }, [history])
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(values)
 
         if (handleValidation()) {
-            const { password, confirmPassword, email, username, type } = values
+            const { password, email, username, type } = values
             console.log(values)
             try {
                 const { data } = await register({ username, password, email, type })
@@ -97,7 +97,7 @@ function Register() {
             })
             console.log('email required')
             return false
-        } else if (type == "") {
+        } else if (type === "") {
             toast.error("Choose one from creator or student", {
                 theme: "dark",
                 autoClose: 8000

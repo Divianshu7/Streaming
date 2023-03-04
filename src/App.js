@@ -1,14 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Register from './pages/register';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './pages/login';
-import { useEffect, useState } from 'react';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import axios from 'axios';
 import Video from './pages/Video';
 function App() {
 

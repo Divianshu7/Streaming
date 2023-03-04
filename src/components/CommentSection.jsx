@@ -1,7 +1,7 @@
 import { Button, Input, styled } from '@mui/material'
 import { Box } from '@mui/system'
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Comments from './Comments'
 import { v4 as uuidv4 } from 'uuid';
 function CommentSection({ videoId }) {
@@ -16,19 +16,17 @@ function CommentSection({ videoId }) {
         temp.replies = []
         temp._id = uuidv4()
         setComments([...comments, temp])
-        const resp = await axios.post(`${process.env.REACT_APP_API}/comment/${videoId}/${user._id}`, { comment })
+        await axios.post(`${process.env.REACT_APP_API}/comment/${videoId}/${user._id}`, { comment })
     }
     const allComments = async () => {
         const res = await axios.get(`${process.env.REACT_APP_API}/getcomment/${videoId}`)
         setComments(res.data)
     }
-    const addReply = async () => {
-        console.log()
-    }
+
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem("chat-app-user")))
         allComments()
-    }, [])
+    }, [allComments])
 
     return (
         <Container>

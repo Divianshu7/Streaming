@@ -1,7 +1,6 @@
 import { styled } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
-import moment from 'moment'
 function UploadList({ medias }) {
     console.log(medias)
     return (
