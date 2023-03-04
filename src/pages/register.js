@@ -3,10 +3,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Box, styled } from '@mui/system'
 import { Checkbox } from '@mui/material'
+import jwt_decode from 'jwt-decode'
+
 import { register } from '../utils/auth'
 function Register() {
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const history = useNavigate()
+    const [showDiv, setShowDiv] = useState(false)
     const [checked, setChecked] = useState([false, false])
     const [values, setValues] = useState({
         username: '',
@@ -15,6 +18,28 @@ function Register() {
         confirmPassword: '',
         type: ""
     })
+    function handleCallBack(response) {
+        console.log("Encoded Jwt token:" + response.credential)
+        var userObject = jwt_decode(response.credential)
+        console.log(userObject)
+        const userName = userObject.name
+        values.username = userName
+        setValues({ ...values, username: userName })
+        setValues({ ...values, email: userObject.email })
+
+        setShowDiv(true)
+    }
+    useEffect(() => {
+        /* global google */
+        google.accounts.id.initialize({
+            client_id: "95563530583-cu6jr5acjohjpetfeeivvu6hq2n55q8i.apps.googleusercontent.com",
+            callback: handleCallBack
+        })
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            { theme: "outline", size: "large" }
+        )
+    }, [])
     useEffect(() => {
         if (localStorage.getItem('chat-app-user')) {
             history('/')
@@ -22,13 +47,16 @@ function Register() {
     }, [])
     const handleSubmit = async (e) => {
         e.preventDefault()
+        console.log(values)
+
         if (handleValidation()) {
             const { password, confirmPassword, email, username, type } = values
+            console.log(values)
             try {
                 const { data } = await register({ username, password, email, type })
                 if (data.status === true) {
                     localStorage.setItem('chat-app-user', JSON.stringify(data.user))
-                    // history('/')
+                    history('/home')
                 } else {
                     toast.error(data.msg)
                 }
@@ -82,6 +110,55 @@ function Register() {
     }
     return (
         <>
+            {showDiv && <FormContainer>
+                <form onSubmit={(e) => handleSubmit(e)}>
+                    <div className='brand'>
+                        {/* <img src={Logo} alt='Logo' /> */}
+                        <h1>snappy</h1>
+                    </div>
+                    <input type='password' name='password' placeholder='password' onChange={(e) => handleChnage(e)} />
+                    <input type='password' name='confirmPassword' placeholder='Confirm Password' onChange={(e) => handleChnage(e)} />
+                    <div className='check'>
+                        <div><Checkbox {...label} onChange=
+                            {
+                                (e) => {
+                                    if (e.target.checked) {
+                                        setChecked([true, false])
+                                        setValues({ ...values, type: "creator" })
+                                    }
+                                    else {
+                                        setChecked([false, true])
+                                        setValues({ ...values, type: "student" })
+                                    }
+                                }
+                            }
+                            checked={checked[0]}
+                        />
+                            <label>creator</label>
+                        </div>
+                        <div>
+                            <Checkbox
+                                {...label}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setChecked([false, true])
+                                        setValues({ ...values, type: "student" })
+                                    }
+                                    else {
+                                        setChecked([true, false])
+                                        setValues({ ...values, type: "creator" })
+                                    }
+                                }
+                                }
+                                checked={checked[1]}
+                            />
+                            <label>student</label>
+                        </div>
+                    </div>
+
+                    <button type='submit' >Create User</button>
+                </form>
+            </FormContainer>}
             <FormContainer>
                 <form onSubmit={(e) => handleSubmit(e)}>
                     <div className='brand'>
@@ -129,6 +206,8 @@ function Register() {
                             <label>student</label>
                         </div>
                     </div>
+                    <div id='signInDiv' ></div>
+
                     <button type='submit' >Create User</button>
                     <span>already have an account ? <Link to='/'>Login</Link> </span>
                 </form>

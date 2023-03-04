@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import axios from 'axios';
+import Video from './pages/Video';
 function App() {
 
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route exact path='/register' element={<Register />} />
           <Route exact path='/home' element={<Home />} />
           <Route exact path='/dashboard' element={<Dashboard />} />
+          <Route exact path='/video/:videoId' element={<Video />} />
         </Routes>
       </BrowserRouter>
     </div>

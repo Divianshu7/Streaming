@@ -1,21 +1,34 @@
 import { styled } from '@mui/material'
 import { Box } from '@mui/system'
-import React from 'react'
+import React, { useState } from 'react'
 import LiveTv from '@mui/icons-material/LiveTv';
+import { useNavigate } from 'react-router-dom';
+import { AccountCircle } from '@mui/icons-material';
 function TopNav() {
     const user = JSON.parse(localStorage.getItem("chat-app-user"))
-    const { username } = user
+    const [showdrop, setShowDrop] = useState(false)
+    const navigate = useNavigate()
+    const loginout = () => {
+        localStorage.clear()
+        navigate('/')
+    }
     return (
         <Container>
-            <div className='logo1'>
+            <div onClick={() => navigate('/home')} className='logo1'>
                 <LiveTv className='icon' />
                 <label>Streaming</label>
             </div>
-            <div className='user'>
+            {user && user.type === "creator" && <div onClick={() => navigate('/dashboard')} className='logo1'>
+                <label>Dashboard</label>
+            </div>}
+            <div className='user1'>
                 <div className='userD'>
-                    <div className='Logo' >
-                        <h1>{username[0]}</h1>
+                    <div onClick={() => setShowDrop(!showdrop)} className='Logo' >
+                        {user ? (<h1>{user.username[0]}</h1>) : (<AccountCircle />)}
                     </div>
+                    {showdrop && <div onClick={loginout} className='drop' >
+                        <div>{user ? "Logout" : "Login"}</div>
+                    </div>}
                 </div>
             </div>
         </Container>
@@ -29,6 +42,17 @@ const Container = styled(Box)({
     padding: "1rem 6%",
     alignItems: "center",
     justifyContent: "space-between",
+    ".drop": {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "absolute",
+        top: "80px",
+        backgroundColor: "green",
+        height: "70px",
+        width: "50px",
+        borderRadius: "30px"
+    },
     ".icon": {
         color: "white"
     },
@@ -36,7 +60,8 @@ const Container = styled(Box)({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        width: "12vw"
+        width: "100px",
+        cursor: "pointer"
     },
     ".userD": {
         display: "flex",
@@ -55,9 +80,10 @@ const Container = styled(Box)({
         justifyContent: "center",
         alignItems: "center",
         fontSize: "10px",
-        borderRadius: "100px"
+        borderRadius: "100px",
+        cursor: "pointer"
     },
-    ".user": {
+    ".user1": {
         display: "flex",
         justifyContent: ""
     },

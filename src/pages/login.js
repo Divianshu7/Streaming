@@ -5,11 +5,22 @@ import { toast } from 'react-toastify'
 // import Logo from '../assets/logo.svg'
 import jwt_decode from 'jwt-decode'
 import { login } from '../utils/auth'
+import axios from 'axios'
 function Login() {
     function handleCallBack(response) {
         console.log("Encoded Jwt token:" + response.credential)
         var userObject = jwt_decode(response.credential)
         console.log(userObject)
+        const email = userObject.email
+        console.log(email)
+        const { data } = axios.post(`${process.env.REACT_APP_API}/loginWithGoogle`, { email }).then((r) => { return r })
+        if (data.status === true) {
+            localStorage.setItem('chat-app-user', JSON.stringify(data.user))
+            history('/home')
+            console.log(data)
+        } else {
+            toast.error(data.msg)
+        }
     }
     useEffect(() => {
         /* global google */
@@ -29,7 +40,7 @@ function Login() {
     })
     useEffect(() => {
         if (localStorage.getItem('chat-app-user')) {
-            history('/')
+            history('/home')
         }
     }, [])
     const handleSubmit = async (e) => {
@@ -40,7 +51,7 @@ function Login() {
                 const { data } = await login({ username, password })
                 if (data.status === true) {
                     localStorage.setItem('chat-app-user', JSON.stringify(data.user))
-                    history('/')
+                    history('/home')
                     console.log(data)
                 } else {
                     toast.error(data.msg)
