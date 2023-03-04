@@ -2,13 +2,15 @@ import { Button, Input, styled } from '@mui/material'
 import { Box } from '@mui/system'
 import axios from 'axios'
 import React, { useState } from 'react'
-
+import { LoadingOutlined } from '@ant-design/icons'
 function UploadForm({ getAllvideos }) {
     const [name, setName] = useState('')
+    const [submitButton, setSubmitButton] = useState(true)
     const [videos, setVideos] = useState([])
     const user = JSON.parse(localStorage.getItem('chat-app-user'))
     const handleSubmit = (e) => {
         e.preventDefault()
+        setSubmitButton(false)
         if (user) {
             let formData = new FormData()
             for (let key in videos) {
@@ -19,6 +21,7 @@ function UploadForm({ getAllvideos }) {
             axios.post(`${process.env.REACT_APP_API}/create`, formData).then(success => {
                 getAllvideos()
                 alert('Submitted')
+                setSubmitButton(true)
             }).catch(error => {
                 console.log(error)
                 alert("Error happened!")
@@ -40,7 +43,8 @@ function UploadForm({ getAllvideos }) {
                         setVideos(e.target.files)
                     }} type='file' name='videos' id='videos' accept='.mp4,.mkv' />
                 </div>
-                <Button variant='contained' type='submit' >Submit</Button>
+                <Button disabled={!submitButton || name.length < 1 || videos === []} variant='contained' type='submit' >Submit</Button>
+                {!submitButton && (<LoadingOutlined />)}
             </form>
         </Container>
     )
