@@ -4,9 +4,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 // import Logo from '../assets/logo.svg'
 import jwt_decode from 'jwt-decode'
+import Welcome from './Welcome'
 import { login } from '../utils/auth'
 import axios from 'axios'
 function Login() {
+    const [loading, setLoading] = useState(true)
     function handleCallBack(response) {
         console.log("Encoded Jwt token:" + response.credential)
         var userObject = jwt_decode(response.credential)
@@ -28,25 +30,27 @@ function Login() {
     }
     useEffect(() => {
         /* global google */
-        google.accounts.id.initialize({
-            client_id: "95563530583-cu6jr5acjohjpetfeeivvu6hq2n55q8i.apps.googleusercontent.com",
-            callback: handleCallBack
-        })
-        google.accounts.id.renderButton(
-            document.getElementById("signInDiv"),
-            { theme: "outline", size: "large" }
-        )
-    }, [])
+        if (!loading) {
+            google.accounts.id.initialize({
+                client_id: "95563530583-cu6jr5acjohjpetfeeivvu6hq2n55q8i.apps.googleusercontent.com",
+                callback: handleCallBack
+            })
+            google.accounts.id.renderButton(
+                document.getElementById("signInDiv"),
+                { theme: "outline", size: "large" }
+            )
+        }
+    }, [loading])
     const history = useNavigate()
     const [values, setValues] = useState({
         username: '',
         password: '',
     })
     useEffect(() => {
-        if (localStorage.getItem('chat-app-user')) {
+        if (localStorage.getItem('chat-app-user') && !loading) {
             history('/home')
         }
-    }, [])
+    }, [loading])
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (handleValidation()) {
@@ -89,23 +93,32 @@ function Login() {
     const handleChnage = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value })
     }
-    return (
-        <>
+    const load = async () => {
+        await axios.get(`${process.env.REACT_APP_API}/connect`)
+        console.log('connected')
+        setLoading(false)
+    }
+    load()
+    return (<>
+        {loading ? (<Welcome />) :
+            <>
 
-            <FormContainer>
-                <form onSubmit={(e) => handleSubmit(e)}>
-                    <div className='brand'>
-                        {/* <img src={Logo} alt='Logo' /> */}
-                        <h1>snappy</h1>
-                    </div>
-                    <input type='text' name='username' placeholder='user name' min='3' onChange={(e) => handleChnage(e)} />
-                    <input type='password' name='password' placeholder='password' onChange={(e) => handleChnage(e)} />
-                    <div id='signInDiv' ></div>
-                    <button type='submit' >Login</button>
-                    <span>Don't have an account ? <Link to='/register'>Register</Link> </span>
-                </form>
-            </FormContainer>
-        </>
+                <FormContainer>
+                    <form onSubmit={(e) => handleSubmit(e)}>
+                        <div className='brand'>
+                            {/* <img src={Logo} alt='Logo' /> */}
+                            <h1>snappy</h1>
+                        </div>
+                        <input type='text' name='username' placeholder='user name' min='3' onChange={(e) => handleChnage(e)} />
+                        <input type='password' name='password' placeholder='password' onChange={(e) => handleChnage(e)} />
+                        <div id='signInDiv' ></div>
+                        <button type='submit' >Login</button>
+                        <span>Don't have an account ? <Link to='/register'>Register</Link> </span>
+                    </form>
+                </FormContainer>
+            </>
+        }
+    </>
     )
 }
 const FormContainer = styled(Box)({
